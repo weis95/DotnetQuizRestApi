@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "/Users/weis/.dotnet/store/|arch|/|tfm|",
+      "/Users/weis/.nuget/packages"
+    ]
+  }
+}

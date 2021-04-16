@@ -1,0 +1,24 @@
+﻿<Properties StartupConfiguration="{17BE3445-CC33-4C40-B84D-2194FFE3CC08}|Default">
+  <MonoDevelop.Ide.Workbench>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="QuizApi" expanded="True">
+            <Node name="QuizApi" expanded="True">
+              <Node name="Models" expanded="True">
+                <Node name="QuizItem.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.QuizApi PreferredExecutionTarget="/Applications/Google Chrome.app" />
+</Properties>
