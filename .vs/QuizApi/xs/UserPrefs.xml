@@ -1,13 +1,22 @@
 ﻿<Properties StartupConfiguration="{17BE3445-CC33-4C40-B84D-2194FFE3CC08}|Default">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuizApi/Startup.cs">
+    <Files>
+      <File FileName="QuizApi/Models/QuizContext.cs" Line="14" Column="34" />
+      <File FileName="QuizApi/Models/QuizItem.cs" Line="14" Column="2" />
+      <File FileName="QuizApi/Models/QuizAnswers.cs" Line="6" Column="26" />
+      <File FileName="QuizApi/Models/QuizOption.cs" Line="5" Column="2" />
+      <File FileName="QuizApi/Controllers/QuizItemsController.cs" Line="11" Column="20" />
+      <File FileName="QuizApi/Program.cs" Line="1" Column="1" />
+      <File FileName="QuizApi/Startup.cs" Line="26" Column="20" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="QuizApi" expanded="True">
             <Node name="QuizApi" expanded="True">
-              <Node name="Models" expanded="True">
-                <Node name="QuizItem.cs" selected="True" />
-              </Node>
+              <Node name="Controllers" expanded="True" />
+              <Node name="Models" expanded="True" />
+              <Node name="Startup.cs" selected="True" />
             </Node>
           </Node>
         </State>

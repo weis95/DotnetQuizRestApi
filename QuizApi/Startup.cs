@@ -22,6 +22,12 @@ namespace QuizApi
             services.AddDbContext<QuizContext>(opt =>
                 opt.UseSqlite(Configuration.GetConnectionString("QuizContext")));
             services.AddControllers();
+
+            services.AddCors(options =>
+                options.AddDefaultPolicy(
+                    builder => builder.AllowAnyOrigin()
+                )
+            );
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,7 +39,7 @@ namespace QuizApi
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

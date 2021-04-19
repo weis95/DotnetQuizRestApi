@@ -10,5 +10,7 @@ namespace QuizApi.Models
         }
 
         public DbSet<QuizItem> QuizItem { get; set; }
+        public DbSet<QuizAnswer> QuizAnswers { get; set; }
+        public DbSet<QuizOption> QuizOptions { get; set; }
     }
 }

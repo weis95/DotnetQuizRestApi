@@ -6,7 +6,9 @@ namespace QuizApi.Models
     {
         public int QuizItemId { get; set; }
         public string Question { get; set; }
-        public string Answers { get; set; }
-        public string Options { get; set; }
+        [NotMapped]
+        public string[] Answers { get; set; }
+        [NotMapped]
+        public string[] Options { get; set; }
     }
 }

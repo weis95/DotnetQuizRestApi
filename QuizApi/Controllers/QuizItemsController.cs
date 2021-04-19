@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizApi.Models;
@@ -24,7 +22,15 @@ namespace QuizApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<QuizItem>>> GetQuizItem()
         {
-            return await _context.QuizItem.ToListAsync();
+            var quizItems = await _context.QuizItem.ToListAsync();
+            foreach (var item in quizItems)
+            {
+                var anwers = _context.QuizAnswers.Where(a => a.QuizItemId == item.QuizItemId).Select(a=> a.Answer).ToArray();
+                item.Answers = anwers;
+                var options = _context.QuizOptions.Where(a => a.QuizItemId == item.QuizItemId).Select(a => a.Option).ToArray();
+                item.Options = options;
+            }
+            return quizItems;
         }
 
         // GET: api/QuizItems/5
@@ -37,48 +43,107 @@ namespace QuizApi.Controllers
             {
                 return NotFound();
             }
-
+            var anwers = _context.QuizAnswers.Where(a => a.QuizItemId == quizItem.QuizItemId).Select(a => a.Answer).ToArray();
+            quizItem.Answers = anwers;
+            var options = _context.QuizOptions.Where(a => a.QuizItemId == quizItem.QuizItemId).Select(a => a.Option).ToArray();
+            quizItem.Options = options;
             return quizItem;
         }
 
-        // PUT: api/QuizItems/5
+        // PUT: api/QuizItems/
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuizItem(int id, QuizItem quizItem)
+        [HttpPut]
+        public async Task<IActionResult> PutQuizItem([FromBody]QuizItem quizItem)
         {
-            if (id != quizItem.QuizItemId)
+            
+            var dbItem = _context.QuizItem.Find(quizItem.QuizItemId);
+            _context.Entry(dbItem).State = EntityState.Detached;
+            if (dbItem == null)
             {
                 return BadRequest();
             }
-
             _context.Entry(quizItem).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!QuizItemExists(id))
+                if (quizItem.Answers != null && quizItem.Answers.Any())
                 {
-                    return NotFound();
+                    var oldAnswers = _context.QuizAnswers.Where(a => a.QuizItemId == quizItem.QuizItemId);
+                    _context.QuizAnswers.RemoveRange(oldAnswers);
+                    _context.SaveChanges();
+                    foreach (var item in quizItem.Answers)
+                    {
+                        var answer = new QuizAnswer
+                        {
+                            Answer = item,
+                            QuizItemId = quizItem.QuizItemId
+                        };
+                        _context.QuizAnswers.Add(answer);
+                    }
+                    await _context.SaveChangesAsync();
                 }
-                else
+
+                if (quizItem.Options != null && quizItem.Options.Any())
                 {
-                    throw;
+                    var oldOptions = _context.QuizOptions.Where(a => a.QuizItemId == quizItem.QuizItemId);
+                    _context.QuizOptions.RemoveRange(oldOptions);
+                    _context.SaveChanges();
+                    foreach (var item in quizItem.Options)
+                    {
+                        var option = new QuizOption
+                        {
+                            Option = item,
+                            QuizItemId = quizItem.QuizItemId
+                        };
+                        _context.QuizOptions.Add(option);
+                    }
+                    await _context.SaveChangesAsync();
                 }
             }
 
-            return NoContent();
+            catch (DbUpdateConcurrencyException)
+            {
+                
+            }
+
+            return Ok("Updated successfully!");
         }
 
         // POST: api/QuizItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<QuizItem>> PostQuizItem(QuizItem quizItem)
+        public async Task<ActionResult<QuizItem>> PostQuizItem([FromBody]QuizItem quizItem)
         {
             _context.QuizItem.Add(quizItem);
             await _context.SaveChangesAsync();
+            if(quizItem.Answers != null && quizItem.Answers.Any())
+            {
+                foreach (var item in quizItem.Answers)
+                {
+                    var answer = new QuizAnswer
+                    {
+                        Answer = item,
+                        QuizItemId = quizItem.QuizItemId
+                    };
+                    _context.QuizAnswers.Add(answer);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            if (quizItem.Options != null && quizItem.Options.Any())
+            {
+                foreach (var item in quizItem.Options)
+                {
+                    var option = new QuizOption
+                    {
+                        Option = item,
+                        QuizItemId = quizItem.QuizItemId
+                    };
+                    _context.QuizOptions.Add(option);
+                }
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction("GetQuizItem", new { id = quizItem.QuizItemId }, quizItem);
         }
@@ -92,16 +157,16 @@ namespace QuizApi.Controllers
             {
                 return NotFound();
             }
+            var anwers = _context.QuizAnswers.Where(a => a.QuizItemId == quizItem.QuizItemId).ToList();
+           
+            var options = _context.QuizOptions.Where(a => a.QuizItemId == quizItem.QuizItemId).ToList();
 
+            _context.QuizAnswers.RemoveRange(anwers);
+            _context.QuizOptions.RemoveRange(options);
             _context.QuizItem.Remove(quizItem);
             await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
-
-        private bool QuizItemExists(int id)
-        {
-            return _context.QuizItem.Any(e => e.QuizItemId == id);
+            return Ok("Deleted successfully!");
         }
     }
 }

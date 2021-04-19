@@ -14,7 +14,7 @@
         "outputPath": "/Users/weis/Projects/QuizApi/QuizApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/weis/.nuget/NuGet/NuGet.Config"
+          "/Users/weis/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -38,6 +38,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Microsoft.AspNet.WebApi.Cors": {
+              "target": "Package",
+              "version": "[5.2.7, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
